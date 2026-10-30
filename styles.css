@@ -204,3 +204,4 @@ h2 { font-size: 1.7rem; margin-bottom: 20px; }
   .details { padding: 20px 16px; }
   .panel { padding: 24px 18px; }
 }
+.details p + .d-links { margin-top: 18px; }

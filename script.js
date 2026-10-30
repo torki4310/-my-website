@@ -100,6 +100,7 @@ const ring = $("ring");
 const stage = $("stage");
 let activeCategory = ALL;
 let items = [];      // المشاريع المعروضة حالياً
+let slots = [];      // المشاريع على الدائرة (تتكرر إذا كانت قليلة لتبقى الدائرة ممتلئة)
 let cards = [];
 let step = 360;
 let rot = 0;         // زاوية الدوران الحالية
@@ -121,11 +122,13 @@ function buildRing() {
   items = PROJECTS
     .filter((p) => activeCategory === ALL || p.category === activeCategory)
     .sort((a, b) => Number(b.featured) - Number(a.featured));
-  step = 360 / Math.max(items.length, 1);
+  slots = [];
+  while (items.length && slots.length < 6) slots.push(...items);
+  step = 360 / Math.max(slots.length, 1);
 
-  ring.innerHTML = items.map((p, i) => {
+  ring.innerHTML = slots.map((p, i) => {
     const [c1, c2] = GRADIENTS[PROJECTS.indexOf(p) % GRADIENTS.length];
-    const media = p.image ? `<img src="${escapeHTML(p.image)}" alt="" loading="lazy" draggable="false">` : escapeHTML(p.title.charAt(0));
+    const media = p.image ? `<img src="${escapeHTML(p.image)}" alt="" loading="lazy" draggable="false">` : escapeHTML(p.icon || p.title.charAt(0));
     return `
       <button class="p-card" data-i="${i}" style="--c1:${c1};--c2:${c2}" aria-label="${escapeHTML(p.title)}">
         <div class="p-media">${media}${p.featured ? '<span class="badge">مميّز</span>' : ""}</div>
@@ -170,8 +173,8 @@ function render() {
       c.classList.toggle("front", i === idx);
       c.tabIndex = i === idx ? 0 : -1;
     });
-    showDetails(items[idx]);
-    $("counter").textContent = `${idx + 1} / ${n}`;
+    showDetails(slots[idx]);
+    $("counter").textContent = `${items.indexOf(slots[idx]) + 1} / ${items.length}`;
   }
 }
 
@@ -185,7 +188,7 @@ function showDetails(p) {
     <span class="d-cat">${escapeHTML(p.category)}</span>
     <h3>${escapeHTML(p.title)}</h3>
     <p>${escapeHTML(p.description)}</p>
-    <div class="tags">${p.tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>
+    ${p.tags.length ? `<div class="tags">${p.tags.map((t) => `<span class="tag">${escapeHTML(t)}</span>`).join("")}</div>` : ""}
     ${links ? `<div class="d-links">${links}</div>` : ""}`;
   d.classList.remove("swap"); void d.offsetWidth; d.classList.add("swap");
 }
