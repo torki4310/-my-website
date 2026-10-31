@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منتجع مرسى اللؤلؤ</title>
+<meta name="description" content="منتجع فاخر على شاطئ هادئ: فلل فوق الماء، تجارب بحرية، وضيافة راقية.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #d8b77a;
+    --gold-soft: #ecd9b3;
+    --ink: #0d1b24;
+    --ink-2: #13283a;
+    --sand: #f6f1e8;
+    --text: #1d2a33;
+    --muted: #5d6b74;
+    --white: #ffffff;
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "IBM Plex Sans Arabic", system-ui, sans-serif;
+    background: var(--sand);
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, .brand { font-family: "El Messiri", serif; font-weight: 600; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(16px, 5vw, 64px);
+    color: var(--white);
+    transition: background .4s, padding .4s, box-shadow .4s;
+  }
+  header.scrolled {
+    background: rgba(13, 27, 36, .82);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    padding-block: 14px;
+    box-shadow: 0 6px 30px rgba(0,0,0,.18);
+  }
+  .brand { font-size: 1.45rem; letter-spacing: .5px; display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 30px; height: 30px; color: var(--gold); }
+  nav ul { display: flex; gap: 34px; list-style: none; font-size: .95rem; }
+  nav a { opacity: .85; transition: opacity .25s, color .25s; }
+  nav a:hover { opacity: 1; color: var(--gold-soft); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px 28px; border-radius: 999px;
+    font: 500 .95rem "IBM Plex Sans Arabic", sans-serif;
+    border: 1px solid var(--gold); color: var(--white);
+    background: transparent; cursor: pointer;
+    transition: background .3s, color .3s, transform .3s;
+  }
+  .btn:hover { background: var(--gold); color: var(--ink); transform: translateY(-2px); }
+  .btn.solid { background: var(--gold); color: var(--ink); }
+  .btn.solid:hover { background: var(--gold-soft); }
+  .menu-toggle { display: none; background: none; border: 0; color: inherit; cursor: pointer; }
+  .menu-toggle svg { width: 28px; height: 28px; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative; height: 100vh; height: 100svh; min-height: 560px;
+    display: grid; place-items: center; text-align: center;
+    color: var(--white); overflow: hidden;
+    background: var(--ink) url("sea-poster.jpg") center / cover no-repeat;
+  }
+  .hero video {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; z-index: 0;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 1;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 50%, rgba(8,20,28,.45), transparent 75%),
+      linear-gradient(180deg, rgba(8,20,28,.6) 0%, rgba(8,20,28,.25) 40%, rgba(8,20,28,.65) 100%);
+  }
+  .hero-content { position: relative; z-index: 2; padding: 0 16px; max-width: 860px; }
+  .eyebrow {
+    display: inline-block; font-size: .85rem; letter-spacing: 4px;
+    color: var(--gold-soft); margin-bottom: 18px;
+    padding-bottom: 10px; border-bottom: 1px solid rgba(216,183,122,.5);
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 6.5vw, 5rem); line-height: 1.25;
+    text-shadow: 0 4px 30px rgba(0,0,0,.35);
+  }
+  .hero p {
+    font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 400;
+    text-shadow: 0 2px 14px rgba(0,0,0,.55);
+    margin: 18px auto 36px; max-width: 600px; opacity: .92;
+  }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .scroll-cue {
+    position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+    z-index: 2; color: var(--white); opacity: .8; font-size: .8rem;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-cue span {
+    width: 1px; height: 46px; background: linear-gradient(var(--gold), transparent);
+    animation: drip 2.2s ease-in-out infinite;
+  }
+  @keyframes drip { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+  .sound-toggle {
+    position: absolute; bottom: 30px; inset-inline-start: clamp(16px, 5vw, 64px); z-index: 2;
+    display: none;
+  }
+
+  /* ---------- Booking bar ---------- */
+  .booking {
+    position: relative; z-index: 5;
+    max-width: 1080px; margin: -64px auto 0; padding: 0 16px;
+  }
+  .booking form {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: 0 25px 60px rgba(13,27,36,.16);
+    display: grid; grid-template-columns: repeat(4, 1fr) auto; gap: 0;
+    padding: 10px;
+  }
+  .field { padding: 12px 20px; border-inline-start: 1px solid #ece5d8; }
+  .field:first-child { border-inline-start: 0; }
+  .field label { display: block; font-size: .75rem; color: var(--muted); letter-spacing: 1px; }
+  .field input, .field select {
+    width: 100%; border: 0; outline: 0; background: transparent;
+    font: 500 1rem "IBM Plex Sans Arabic", sans-serif; color: var(--text);
+    padding-top: 4px;
+  }
+  .booking .btn.solid { border-radius: 12px; padding-inline: 34px; }
+  .booking-msg { text-align: center; margin-top: 14px; color: var(--ink-2); min-height: 1.6em; font-size: .95rem; }
+
+  /* ---------- Sections ---------- */
+  section { padding: clamp(72px, 10vw, 130px) clamp(16px, 5vw, 64px); }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+  .section-head .eyebrow { color: #a8874f; border-color: rgba(168,135,79,.35); }
+  .section-head h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.35; color: var(--ink); }
+  .section-head p { color: var(--muted); margin-top: 14px; }
+
+  .intro { display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(32px, 6vw, 90px); align-items: center; max-width: 1200px; margin: 0 auto; }
+  .intro h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); line-height: 1.35; color: var(--ink); margin-bottom: 18px; }
+  .intro p { color: var(--muted); margin-bottom: 16px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+  .stat strong { display: block; font: 600 2.2rem "El Messiri", serif; color: #a8874f; }
+  .stat span { font-size: .85rem; color: var(--muted); }
+  .intro-visual {
+    position: relative; aspect-ratio: 4/5; border-radius: 200px 200px var(--radius) var(--radius);
+    overflow: hidden; box-shadow: 0 30px 70px rgba(13,27,36,.2);
+  }
+  .intro-visual video, .intro-visual img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* Suites */
+  .suites-wrap { background: var(--ink); color: var(--white); }
+  .suites-wrap .section-head h2 { color: var(--white); }
+  .suites-wrap .section-head p { color: rgba(255,255,255,.65); }
+  .suites-wrap .section-head .eyebrow { color: var(--gold-soft); border-color: rgba(216,183,122,.4); }
+  .suites { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; max-width: 1200px; margin: 0 auto; }
+  .suite {
+    position: relative; border-radius: var(--radius); overflow: hidden;
+    min-height: 460px; display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 28px; isolation: isolate;
+    transition: transform .5s;
+  }
+  .suite:hover { transform: translateY(-8px); }
+  .suite .bg { position: absolute; inset: 0; z-index: -2; transition: transform 1.2s ease; }
+  .suite:hover .bg { transform: scale(1.06); }
+  .suite::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, transparent 30%, rgba(8,20,28,.9));
+  }
+  .suite .bg.a { background: radial-gradient(circle at 70% 20%, #ffe2b0 0, transparent 30%), linear-gradient(160deg, #3fa7b5 0%, #1b6f86 45%, #0e3e57 100%); }
+  .suite .bg.b { background: radial-gradient(circle at 30% 25%, #fff4d6 0, transparent 28%), linear-gradient(170deg, #e7c9a0 0%, #7fb7b2 50%, #1f5a6e 100%); }
+  .suite .bg.c { background: radial-gradient(circle at 60% 30%, #ffc98a 0, transparent 26%), linear-gradient(175deg, #f0a774 0%, #9c6f8a 45%, #23395a 100%); }
+  .suite svg.art { position: absolute; top: 34px; left: 50%; transform: translateX(-50%); width: 62%; opacity: .9; z-index: -1; }
+  .suite .tag { font-size: .78rem; color: var(--gold-soft); letter-spacing: 2px; }
+  .suite h3 { font-size: 1.6rem; margin: 6px 0 8px; }
+  .suite p { font-size: .92rem; opacity: .8; }
+  .suite .price { display: flex; justify-content: space-between; align-items: center; margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.15); }
+  .suite .price b { font: 600 1.3rem "El Messiri", serif; color: var(--gold-soft); }
+  .suite .price small { opacity: .7; }
+
+  /* Experiences */
+  .experiences { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; max-width: 1200px; margin: 0 auto; }
+  .exp {
+    background: var(--white); border-radius: var(--radius); padding: 34px 26px;
+    border: 1px solid #eee5d4; transition: transform .4s, box-shadow .4s;
+  }
+  .exp:hover { transform: translateY(-6px); box-shadow: 0 22px 50px rgba(13,27,36,.1); }
+  .exp .icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    display: grid; place-items: center; margin-bottom: 20px;
+    background: linear-gradient(135deg, #f4e6c8, #e7d1a3); color: #8a6a35;
+  }
+  .exp .icon svg { width: 26px; height: 26px; }
+  .exp h3 { font-size: 1.25rem; color: var(--ink); margin-bottom: 8px; }
+  .exp p { font-size: .92rem; color: var(--muted); }
+
+  /* Quote band */
+  .band {
+    position: relative; text-align: center; color: var(--white); overflow: hidden;
+    padding-block: clamp(100px, 14vw, 180px);
+  }
+  .band video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+  .band::before { content: ""; position: absolute; inset: 0; background: rgba(8,20,28,.55); z-index: -1; }
+  .band { isolation: isolate; background: var(--ink-2); }
+  .band blockquote { font: 500 clamp(1.5rem, 3.4vw, 2.5rem)/1.6 "El Messiri", serif; max-width: 820px; margin: 0 auto; }
+  .band cite { display: block; margin-top: 22px; font-style: normal; color: var(--gold-soft); letter-spacing: 2px; font-size: .9rem; }
+
+  /* Footer */
+  footer { background: var(--ink); color: rgba(255,255,255,.75); padding: 70px clamp(16px, 5vw, 64px) 30px; }
+  .foot { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+  .foot h4 { font-family: "El Messiri", serif; color: var(--white); font-size: 1.1rem; margin-bottom: 14px; font-weight: 600; }
+  .foot ul { list-style: none; display: grid; gap: 8px; font-size: .92rem; }
+  .foot a:hover { color: var(--gold-soft); }
+  .foot .brand { color: var(--white); margin-bottom: 14px; }
+  .copy { text-align: center; font-size: .8rem; opacity: .55; margin-top: 50px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.08); }
+
+  /* Reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 1s ease, transform 1s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .scroll-cue span { animation: none; }
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 980px) {
+    .suites { grid-template-columns: 1fr 1fr; }
+    .experiences { grid-template-columns: 1fr 1fr; }
+    .booking form { grid-template-columns: 1fr 1fr; }
+    .field:nth-child(3) { border-inline-start: 0; }
+    .field { border-bottom: 1px solid #ece5d8; }
+    .booking .btn.solid { grid-column: 1 / -1; margin-top: 8px; padding-block: 14px; }
+    .foot { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 760px) {
+    nav { position: fixed; inset: 0; background: rgba(13,27,36,.97); display: grid; place-items: center; opacity: 0; pointer-events: none; transition: opacity .35s; }
+    nav.open { opacity: 1; pointer-events: auto; }
+    nav ul { flex-direction: column; align-items: center; gap: 26px; font-size: 1.3rem; }
+    .menu-toggle { display: block; position: relative; z-index: 60; }
+    header .btn { display: none; }
+    .intro { grid-template-columns: 1fr; }
+    .intro-visual { max-width: 420px; margin: 0 auto; width: 100%; }
+    .suites, .experiences { grid-template-columns: 1fr; }
+    .suite { min-height: 400px; }
+    .booking form { grid-template-columns: 1fr; }
+    .field { border-inline-start: 0 !important; }
+    .foot { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header id="top-bar">
+  <a href="#" class="brand" aria-label="مرسى اللؤلؤ">
+    <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+      <circle cx="16" cy="12" r="5"/>
+      <path d="M3 22c3 0 3-2 6.5-2S13 22 16 22s3-2 6.5-2S26 22 29 22M3 27c3 0 3-2 6.5-2S13 27 16 27s3-2 6.5-2S26 27 29 27"/>
+    </svg>
+    مرسى اللؤلؤ
+  </a>
+  <nav id="nav">
+    <ul>
+      <li><a href="#about">المنتجع</a></li>
+      <li><a href="#suites">الأجنحة</a></li>
+      <li><a href="#experiences">التجارب</a></li>
+      <li><a href="#contact">تواصل معنا</a></li>
+    </ul>
+  </nav>
+  <a href="#book" class="btn">احجز إقامتك</a>
+  <button class="menu-toggle" id="menu-toggle" aria-label="القائمة" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
+</header>
+
+<main>
+  <section class="hero" aria-label="الواجهة">
+    <video id="hero-video" autoplay muted loop playsinline preload="auto" poster="sea-poster.jpg">
+      <source src="sea.mp4" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <span class="eyebrow">منتجع وفلل خاصة على البحر</span>
+      <h1>حيث يهدأ البحر<br>وتبدأ حكايتك</h1>
+      <p>ملاذ فاخر على شاطئ رملي أبيض، بين أمواج هادئة وشمس ذهبية، صُمّم لمن يبحث عن الراحة والخصوصية.</p>
+      <div class="hero-actions">
+        <a href="#book" class="btn solid">احجز الآن</a>
+        <a href="#suites" class="btn">استكشف الأجنحة</a>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">اكتشف<span></span></div>
+  </section>
+
+  <div class="booking" id="book">
+    <form id="booking-form">
+      <div class="field">
+        <label for="checkin">تاريخ الوصول</label>
+        <input type="date" id="checkin" required>
+      </div>
+      <div class="field">
+        <label for="checkout">تاريخ المغادرة</label>
+        <input type="date" id="checkout" required>
+      </div>
+      <div class="field">
+        <label for="guests">الضيوف</label>
+        <select id="guests">
+          <option>ضيفان</option>
+          <option>ضيف واحد</option>
+          <option>3 ضيوف</option>
+          <option>4 ضيوف</option>
+          <option>عائلة (5+)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="room">نوع الإقامة</label>
+        <select id="room">
+          <option>فيلا فوق الماء</option>
+          <option>جناح الشاطئ</option>
+          <option>الفيلا الملكية</option>
+        </select>
+      </div>
+      <button type="submit" class="btn solid">تحقق من التوفر</button>
+    </form>
+    <p class="booking-msg" id="booking-msg" role="status"></p>
+  </div>
+
+  <section id="about">
+    <div class="intro">
+      <div class="reveal">
+        <span class="eyebrow" style="color:#a8874f;border-color:rgba(168,135,79,.35)">مرحباً بك</span>
+        <h2>فخامة هادئة على حافة البحر</h2>
+        <p>في مرسى اللؤلؤ، يوقظك صوت الموج ويودّعك الغروب. صُممت كل فيلا لتطل مباشرة على المياه الفيروزية، مع مسبح خاص وشرفة واسعة وخدمة خادم شخصي على مدار الساعة.</p>
+        <p>مطاعمنا تقدم أطباقاً من البحر إلى المائدة، ومنتجعنا الصحي يجمع بين طقوس الشرق ولمسات العافية الحديثة.</p>
+        <div class="stats">
+          <div class="stat"><strong>48</strong><span>فيلا وجناحاً</span></div>
+          <div class="stat"><strong>2 كم</strong><span>شاطئ خاص</span></div>
+          <div class="stat"><strong>5★</strong><span>ضيافة فاخرة</span></div>
+        </div>
+      </div>
+      <div class="intro-visual reveal">
+        <video autoplay muted loop playsinline preload="none" poster="sea-poster.jpg" aria-hidden="true">
+          <source src="sea.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <section class="suites-wrap" id="suites">
+    <div class="section-head reveal">
+      <span class="eyebrow">الإقامة</span>
+      <h2>أجنحة وفلل بإطلالات لا تُنسى</h2>
+      <p>اختر ملاذك: فوق الماء، على الرمال، أو في أعلى التل حيث يمتد الأفق.</p>
+    </div>
+    <div class="suites">
+      <article class="suite reveal">
+        <div class="bg a"></div>
+        <svg class="art" viewBox="0 0 200 120" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4" aria-hidden="true">
+          <path d="M40 60 L100 22 L160 60 Z"/><rect x="55" y="60" width="90" height="28"/>
+          <path d="M70 88v20M130 88v20M100 88v20"/><path d="M10 110c15 0 15-5 30-5s15 5 30 5 15-5 30-5 15 5 30 5 15-5 30-5 15 5 30 5"/>
+        </svg>
+        <span class="tag">الأكثر طلباً</span>
+        <h3>فيلا فوق الماء</h3>
+        <p>أرضية زجاجية تطل على الشعاب، ومسبح لا متناهٍ يندمج مع البحر.</p>
+        <div class="price"><small>تبدأ من / لليلة</small><b>3,200 ر.س</b></div>
+      </article>
+      <article class="suite reveal">
+        <div class="bg b"></div>
+        <svg class="art" viewBox="0 0 200 120" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4" aria-hidden="true">
+          <path d="M60 55 Q100 15 140 55"/><rect x="62" y="55" width="76" height="40" rx="2"/>
+          <path d="M150 95 C150 60 170 50 178 40M178 40c-10 0-18 4-22 10M178 40c-2 8 0 16-6 22"/>
+          <path d="M10 100h180"/>
+        </svg>
+        <span class="tag">على الرمال</span>
+        <h3>جناح الشاطئ</h3>
+        <p>خطوات قليلة تفصلك عن الموج، مع حديقة استوائية وشرفة للغروب.</p>
+        <div class="price"><small>تبدأ من / لليلة</small><b>2,400 ر.س</b></div>
+      </article>
+      <article class="suite reveal">
+        <div class="bg c"></div>
+        <svg class="art" viewBox="0 0 200 120" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="1.4" aria-hidden="true">
+          <path d="M30 70 L100 30 L170 70"/><rect x="45" y="70" width="110" height="34"/>
+          <path d="M90 104V84h20v20"/><circle cx="100" cy="52" r="6"/><path d="M60 82h16M124 82h16"/>
+        </svg>
+        <span class="tag">الخصوصية المطلقة</span>
+        <h3>الفيلا الملكية</h3>
+        <p>ثلاث غرف نوم، طاهٍ خاص، ورصيف يخت مستقل لتجربة لا تشبه غيرها.</p>
+        <div class="price"><small>تبدأ من / لليلة</small><b>9,800 ر.س</b></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="experiences">
+    <div class="section-head reveal">
+      <span class="eyebrow">التجارب</span>
+      <h2>لحظات تُصنع خصيصاً لك</h2>
+      <p>من رحلات الغروب إلى العشاء تحت النجوم، كل تجربة تُنسّق بعناية.</p>
+    </div>
+    <div class="experiences">
+      <div class="exp reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 17h18l-2 3H5zM12 3v14M12 4l6 10H12"/></svg></div>
+        <h3>رحلات اليخت</h3>
+        <p>إبحار خاص عند الغروب مع مشروبات منعشة وطاقم مخصص.</p>
+      </div>
+      <div class="exp reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 21c-4-3-7-6-7-10a7 7 0 0 1 14 0c0 4-3 7-7 10z"/><path d="M9 11c1 1 5 1 6 0"/></svg></div>
+        <h3>المنتجع الصحي</h3>
+        <p>جلسات تدليك وعلاجات طبيعية في أجنحة تطل على البحر.</p>
+      </div>
+      <div class="exp reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 15c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/><circle cx="15" cy="7" r="3"/><path d="M4 11l5-3"/></svg></div>
+        <h3>الغوص والسنوركل</h3>
+        <p>استكشف الشعاب المرجانية برفقة مرشدين معتمدين.</p>
+      </div>
+      <div class="exp reveal">
+        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3l1.8 3.9L18 7.5l-3 2.9.7 4.1L12 12.6 8.3 14.5 9 10.4 6 7.5l4.2-.6z"/><path d="M5 21h14M8 21v-3h8v3"/></svg></div>
+        <h3>عشاء على الرمال</h3>
+        <p>مائدة خاصة على الشاطئ، بإضاءة الشموع وقائمة يعدّها الطاهي.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" aria-label="اقتباس">
+    <video autoplay muted loop playsinline preload="none" poster="sea-poster.jpg" aria-hidden="true">
+      <source src="sea.mp4" type="video/mp4">
+    </video>
+    <blockquote class="reveal">
+      البحر لا يُوصف، بل يُعاش.<br>وهنا تعيشه كما لم تعشه من قبل.
+      <cite>— مرسى اللؤلؤ</cite>
+    </blockquote>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="foot">
+    <div>
+      <div class="brand">مرسى اللؤلؤ</div>
+      <p style="font-size:.92rem;max-width:300px">منتجع فاخر على شاطئ هادئ، حيث تلتقي الضيافة الأصيلة بجمال البحر.</p>
+    </div>
+    <div>
+      <h4>المنتجع</h4>
+      <ul>
+        <li><a href="#suites">الأجنحة والفلل</a></li>
+        <li><a href="#experiences">التجارب</a></li>
+        <li><a href="#book">الحجز</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>تواصل</h4>
+      <ul>
+        <li>reservations@marsa-pearl.example</li>
+        <li dir="ltr" style="text-align:right">+966 00 000 0000</li>
+      </ul>
+    </div>
+    <div>
+      <h4>العنوان</h4>
+      <ul>
+        <li>ساحل البحر الأحمر</li>
+        <li>مفتوح طوال العام</li>
+      </ul>
+    </div>
+  </div>
+  <p class="copy">© <span id="year"></span> مرسى اللؤلؤ. جميع الحقوق محفوظة.</p>
+</footer>
+
+<script>
+  // Header style on scroll
+  const bar = document.getElementById('top-bar');
+  const onScroll = () => bar.classList.toggle('scrolled', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Mobile menu
+  const nav = document.getElementById('nav');
+  const toggle = document.getElementById('menu-toggle');
+  toggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', open);
+  });
+  nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    nav.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Reveal on scroll
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i % 4) * 0.08 + 's';
+    io.observe(el);
+  });
+
+  // Respect reduced motion: pause background videos
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('video').forEach(v => { v.removeAttribute('autoplay'); v.pause(); });
+  }
+
+  // Booking form (demo)
+  const today = new Date().toISOString().split('T')[0];
+  const cin = document.getElementById('checkin');
+  const cout = document.getElementById('checkout');
+  cin.min = today; cout.min = today;
+  cin.addEventListener('change', () => { cout.min = cin.value; if (cout.value && cout.value <= cin.value) cout.value = ''; });
+  document.getElementById('booking-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const nights = Math.round((new Date(cout.value) - new Date(cin.value)) / 86400000);
+    const msg = document.getElementById('booking-msg');
+    if (nights < 1) { msg.textContent = 'يرجى اختيار تاريخ مغادرة بعد تاريخ الوصول.'; return; }
+    msg.textContent = `✓ متوفر: ${document.getElementById('room').value} لمدة ${nights} ${nights === 1 ? 'ليلة' : nights === 2 ? 'ليلتين' : 'ليالٍ'}. سيتواصل معك فريق الحجوزات قريباً.`;
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
