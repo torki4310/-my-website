@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ملف شركتي — ملف تعريفي احترافي لشركتك</title>
+<meta name="description" content="أدخل معلومات شركتك، ودع الذكاء الاصطناعي يصوغها بلغة مهنية، ثم نزّل ملفًا تعريفيًا بصيغة PDF.">
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="container">
+    <a class="brand" href="/"><span class="brand-mark">م</span>ملف شركتي</a>
+    <nav class="nav">
+      <a class="btn btn-ghost btn-sm hide-sm" href="#sample">النموذج</a>
+      <a class="btn btn-ghost btn-sm" href="/app">مشاريعي</a>
+      <a class="btn btn-primary btn-sm" href="/app#new">ابدأ الآن</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge badge-ai" id="modeBadge" hidden></span>
+        <h1>ملف تعريفي احترافي لشركتك <span>في دقائق</span></h1>
+        <p class="lead">أدخل معلومات شركتك وارفع شعارها وصور أعمالها. يساعدك الذكاء الاصطناعي على صياغة المحتوى بلغة مهنية واضحة، ثم تختار القالب وتعدّل النتيجة وتنزّل ملف PDF جاهزًا للإرسال والطباعة.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="/app#new">أنشئ ملف شركتك</a>
+          <a class="btn btn-ghost btn-lg" href="#sample">شاهد نموذجًا</a>
+        </div>
+        <p class="small muted" style="margin-top:14px">بالعربية أو الإنجليزية أو كلتيهما — نسختان منفصلتان.</p>
+      </div>
+      <div>
+        <div class="hero-sample" id="heroSample"><iframe title="غلاف ملف تعريفي نموذجي" src="/api/sample/preview/ar?template=visual" tabindex="-1" loading="lazy"></iframe></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="padding-top:8px">
+    <div class="container">
+      <div class="points">
+        <div class="card point"><div class="ico">١</div><h3>صياغة من معلوماتك فقط</h3><p>لا يخترع الذكاء الاصطناعي عملاء أو أرقامًا أو شهادات أو سنوات خبرة. ما ينقص نطلبه منك، أو نحذف الجزء المتعلق به.</p></div>
+        <div class="card point"><div class="ico">٢</div><h3>قوالب مصممة بعناية</h3><p>قالب رسمي بسيط، وقالب بصري للشركات الخدمية. خط عربي واضح، وصور بنسبها الأصلية، وصفحات إضافية للنصوص الطويلة.</p></div>
+        <div class="card point"><div class="ico">٣</div><h3>ملفاتك لك وحدك</h3><p>مسوداتك وصورك محفوظة في حسابك على هذا المتصفح فقط، وليست عامة. يمكنك حذف المشروع وملفاته في أي وقت.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="container">
+      <h2>كيف تعمل الخدمة؟</h2>
+      <ol class="how">
+        <li><b>أدخل معلومات شركتك</b><p class="muted small">النشاط، الخدمات، نقاط التميز، المشاريع وصورها، وبيانات التواصل والشعار.</p></li>
+        <li><b>ولّد المسودة وراجعها</b><p class="muted small">صياغة مهنية بالعربية أو الإنجليزية، مع تنبيه لأي معلومة ناقصة.</p></li>
+        <li><b>اختر القالب وعدّل</b><p class="muted small">الألوان، ترتيب الأقسام، إخفاء ما لا تريده، وإعادة صياغة قسم واحد فقط.</p></li>
+        <li><b>نزّل PDF</b><p class="muted small">خط مضمّن ونص قابل للتحديد والنسخ. احفظ المسودة وعد إليها متى شئت.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="block" id="sample">
+    <div class="container">
+      <h2>نموذج تجريبي</h2>
+      <p class="muted">ملف لشركة <b>افتراضية</b> («شركة المثال للخدمات الفنية») لعرض شكل النتيجة فقط. لا تمثل شركة حقيقية.</p>
+      <div class="sample-bar">
+        <div class="row">
+          <div class="seg" role="group" aria-label="القالب"><button data-tpl="formal" class="on">رسمي بسيط</button><button data-tpl="visual">بصري</button></div>
+          <div class="seg" role="group" aria-label="اللغة"><button data-lang="ar" class="on">العربية</button><button data-lang="en">English</button></div>
+        </div>
+        <a class="btn btn-ghost btn-sm" id="samplePdf" href="/api/sample/pdf/ar?template=formal" target="_blank" rel="noopener">افتح PDF النموذج</a>
+      </div>
+      <div class="preview-wrap" id="sampleWrap"><div class="preview-scale"><iframe id="sampleFrame" title="معاينة النموذج" src="/api/sample/preview/ar?template=formal"></iframe></div></div>
+      <div style="text-align:center;margin-top:28px"><a class="btn btn-primary btn-lg" href="/app#new">أنشئ ملف شركتك</a></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container spread">
+    <span>ملف شركتي — نسخة أولى</span>
+    <span>الخط: Readex Pro (SIL OFL)</span>
+  </div>
+</footer>
+<script src="/js/landing.js"></script>
+</body>
+</html>
