@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TF Cranium · إصدار محدود</title>
+<meta name="description" content="سماعة TF Cranium: إصدار محدود من 99 قطعة فقط، تُصنع يدوياً تحت الطلب.">
+<meta name="theme-color" content="#020206">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Readex+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #020206;
+    --ink: #e9e9f1;
+    --muted: #8d8da3;
+    --dim: #55556a;
+    --chrome: #c9cad6;
+    --accent: #ff4fd8;
+    --accent-2: #b26bff;
+    --line: rgba(255, 255, 255, 0.09);
+    --glass: rgba(14, 14, 24, 0.55);
+    --radius: 18px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
+  body {
+    font-family: "Readex Pro", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.8;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .latin { font-family: "Orbitron", sans-serif; letter-spacing: .08em; direction: ltr; unicode-bidi: isolate; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; }
+
+  /* ---------- الخلفية الحية ---------- */
+  #sky { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+  .nebula { position: fixed; inset: -20%; z-index: 0; pointer-events: none; overflow: hidden; }
+  .nebula span {
+    position: absolute; border-radius: 50%; filter: blur(90px); opacity: .32; mix-blend-mode: screen;
+    animation: drift 60s ease-in-out infinite alternate;
+  }
+  .nebula span:nth-child(1) { width: 48vw; height: 38vw; left: 8%;  top: 18%; background: radial-gradient(circle, #5a2a8c, transparent 70%); }
+  .nebula span:nth-child(2) { width: 40vw; height: 34vw; right: 6%; top: 40%; background: radial-gradient(circle, #8c1f6e, transparent 70%); animation-duration: 75s; animation-delay: -20s; opacity: .22; }
+  .nebula span:nth-child(3) { width: 55vw; height: 30vw; left: 30%; bottom: 4%; background: radial-gradient(circle, #1f3a7a, transparent 70%); animation-duration: 90s; animation-delay: -40s; opacity: .25; }
+  @keyframes drift {
+    0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+    50%  { transform: translate(4vw, -3vw) scale(1.15) rotate(12deg); }
+    100% { transform: translate(-3vw, 2vw) scale(.95) rotate(-8deg); }
+  }
+  .vignette { position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.75) 100%); }
+
+  main, header, footer { position: relative; z-index: 2; }
+
+  /* ---------- الترويسة ---------- */
+  header {
+    position: fixed; top: 0; inset-inline: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding: 18px clamp(16px, 4vw, 48px);
+    background: linear-gradient(to bottom, rgba(2,2,6,.85), transparent);
+    transition: background .4s, box-shadow .4s;
+  }
+  header.scrolled { background: rgba(4,4,10,.78); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 600; }
+  .brand-mark {
+    width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+    border: 1px solid var(--line); background: linear-gradient(145deg, #2a2a35, #0b0b12);
+    font-family: "Orbitron", sans-serif; font-weight: 900; font-size: 14px; color: var(--chrome);
+  }
+  .brand small { display: block; color: var(--muted); font-weight: 400; font-size: 12px; line-height: 1.2; }
+  nav { display: flex; gap: 28px; font-size: 14px; color: var(--muted); }
+  nav a:hover { color: var(--ink); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 12px 26px; border-radius: 999px; border: 1px solid transparent; cursor: pointer;
+    font-weight: 500; font-size: 15px; transition: transform .25s, box-shadow .25s, background .25s;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
+    box-shadow: 0 0 0 0 rgba(255,79,216,.5), 0 10px 30px -10px rgba(255,79,216,.6);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(255,79,216,.45), 0 14px 34px -10px rgba(255,79,216,.7); }
+  .btn-ghost { border-color: var(--line); background: rgba(255,255,255,.03); }
+  .btn-ghost:hover { background: rgba(255,255,255,.08); }
+  .btn-sm { padding: 9px 18px; font-size: 14px; }
+
+  /* ---------- البطل ---------- */
+  .hero {
+    min-height: 100vh; min-height: 100svh;
+    display: grid; grid-template-rows: auto 1fr auto; justify-items: center;
+    padding: 100px clamp(16px, 4vw, 48px) 36px;
+  }
+  .hero-head { text-align: center; max-width: 760px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 10px; padding: 6px 16px; border-radius: 999px;
+    border: 1px solid rgba(255,79,216,.35); background: rgba(255,79,216,.07);
+    font-size: 13px; color: #ffc3f1;
+  }
+  .badge i { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); animation: blink 2s infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  .hero h1 {
+    margin-top: 18px; font-family: "Orbitron", sans-serif; font-weight: 900;
+    font-size: clamp(38px, 7vw, 86px); line-height: 1; letter-spacing: .12em; direction: ltr;
+    background: linear-gradient(180deg, #ffffff 0%, #c9cad6 45%, #5d5e6e 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero .tagline { margin-top: 14px; color: var(--muted); font-size: clamp(15px, 1.6vw, 18px); }
+
+  /* المسرح */
+  .stage-wrap {
+    position: relative; width: 100%; max-width: 1280px;
+    display: grid; grid-template-columns: 1fr minmax(300px, 520px) 1fr; align-items: center; gap: 24px;
+    margin: 10px 0;
+  }
+  .stage {
+    position: relative; aspect-ratio: 1179 / 1334; width: min(100%, calc(60vh * 1179 / 1334)); justify-self: center;
+    perspective: 1400px;
+  }
+  .stage::before { /* هالة خلفية */
+    content: ""; position: absolute; inset: 6% -6% 10%; border-radius: 50%;
+    background: radial-gradient(circle, rgba(178,107,255,.20), rgba(255,79,216,.08) 40%, transparent 68%);
+    filter: blur(10px); animation: halo 7s ease-in-out infinite;
+  }
+  @keyframes halo { 50% { opacity: .55; transform: scale(1.06); } }
+  .orbit {
+    position: absolute; left: 50%; top: 50%; width: 118%; aspect-ratio: 1; translate: -50% -50%;
+    border-radius: 50%; border: 1px solid rgba(255,255,255,.06); pointer-events: none;
+    transform: rotateX(74deg); transform-style: preserve-3d;
+  }
+  .orbit::after {
+    content: ""; position: absolute; inset: -1px; border-radius: 50%;
+    background: conic-gradient(from 0deg, transparent 0 80%, rgba(255,79,216,.7) 92%, transparent 100%);
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 2px), #000 calc(100% - 1px));
+    animation: spin 9s linear infinite;
+  }
+  .orbit.o2 { width: 96%; }
+  .orbit.o2::after { animation-duration: 14s; animation-direction: reverse; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .floor {
+    position: absolute; left: 50%; bottom: -3%; width: 70%; height: 8%; translate: -50% 0;
+    border-radius: 50%; background: radial-gradient(ellipse, rgba(255,79,216,.25), rgba(0,0,0,0) 70%);
+    filter: blur(8px); transition: opacity .2s;
+  }
+  .model {
+    position: absolute; inset: 0; transform-style: preserve-3d; will-change: transform;
+  }
+  .model picture, .model img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .model img {
+    object-fit: contain; user-select: none; -webkit-user-drag: none;
+    -webkit-mask-image: radial-gradient(ellipse 58% 56% at 54% 52%, #000 55%, transparent 100%);
+            mask-image: radial-gradient(ellipse 58% 56% at 54% 52%, #000 55%, transparent 100%);
+  }
+  .shine { /* بريق يمر على الكروم فقط بفضل overlay */
+    position: absolute; inset: 0; mix-blend-mode: overlay; pointer-events: none;
+    background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.75) 48%, transparent 60%);
+    background-size: 260% 100%; background-position: 130% 0;
+    -webkit-mask-image: radial-gradient(ellipse 58% 56% at 54% 52%, #000 55%, transparent 100%);
+            mask-image: radial-gradient(ellipse 58% 56% at 54% 52%, #000 55%, transparent 100%);
+    animation: shine 8s ease-in-out infinite;
+  }
+  @keyframes shine { 0%, 55% { background-position: 130% 0; } 85%, 100% { background-position: -30% 0; } }
+  .eye { position: absolute; width: 7%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,120,230,.95), rgba(255,79,216,.45) 30%, transparent 70%);
+    mix-blend-mode: screen; animation: eye 2.4s ease-in-out infinite; }
+  .eye.r { animation-delay: .12s; }
+  @keyframes eye { 0%, 100% { opacity: .55; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.25); } }
+
+  /* نقاط التعريف */
+  .dot {
+    position: absolute; width: 22px; height: 22px; translate: -50% -50%; border-radius: 50%;
+    border: 0; background: transparent; cursor: pointer; z-index: 3;
+  }
+  .dot::before, .dot::after { content: ""; position: absolute; border-radius: 50%; }
+  .dot::before { inset: 6px; background: #fff; box-shadow: 0 0 12px rgba(255,255,255,.9), 0 0 2px #fff; transition: background .3s, box-shadow .3s; }
+  .dot::after { inset: 0; border: 1px solid rgba(255,255,255,.6); animation: ping 2.6s ease-out infinite; }
+  .dot.active::before { background: var(--accent); box-shadow: 0 0 16px var(--accent), 0 0 4px #fff; }
+  .dot.active::after { border-color: var(--accent); }
+  @keyframes ping { 0% { transform: scale(.6); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
+
+  /* خطوط الربط */
+  #links { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; overflow: visible; }
+  #links path { fill: none; stroke: rgba(255,255,255,.14); stroke-width: 1; transition: stroke .4s; }
+  #links path.active { stroke: url(#lg); stroke-width: 1.4; }
+  #links circle { fill: rgba(255,255,255,.35); }
+  #links circle.active { fill: var(--accent); }
+
+  .features { display: flex; flex-direction: column; gap: 14px; z-index: 3; min-width: 0; }
+  .feature {
+    position: relative; text-align: start; padding: 16px 18px; border-radius: 14px; cursor: pointer;
+    background: var(--glass); border: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    transition: border-color .35s, background .35s, transform .35s, opacity .35s; opacity: .62;
+  }
+  .feature:hover { opacity: .9; }
+  .feature.active { opacity: 1; border-color: rgba(255,79,216,.45); background: rgba(30,12,36,.62); transform: scale(1.02); }
+  .feature .num { font-family: "Orbitron", sans-serif; font-size: 11px; color: var(--accent); letter-spacing: .15em; }
+  .feature h3 { font-size: 16px; font-weight: 600; margin: 2px 0 4px; }
+  .feature p { font-size: 13.5px; color: var(--muted); line-height: 1.7; display: none; }
+  .feature.active p { display: block; animation: fade .5s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(4px); } }
+
+  .hero-foot {
+    width: 100%; max-width: 1100px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 32px;
+    padding: 18px 24px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--glass);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  }
+  .stock { flex: 1 1 260px; }
+  .stock-top { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+  .stock-top b { color: var(--ink); font-weight: 500; }
+  .bar { margin-top: 8px; height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); border-radius: inherit; transition: width 2s cubic-bezier(.2,.8,.2,1); }
+  .price { text-align: center; }
+  .price small { display: block; font-size: 12px; color: var(--muted); }
+  .price strong { font-family: "Orbitron", sans-serif; font-size: 24px; font-weight: 700; }
+  .hint { font-size: 12px; color: var(--dim); text-align: center; margin-top: 10px; }
+
+  /* ---------- الأقسام ---------- */
+  section.block { padding: 110px clamp(16px, 4vw, 48px); }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .eyebrow { font-family: "Orbitron", sans-serif; font-size: 12px; letter-spacing: .3em; color: var(--accent); direction: ltr; text-align: right; }
+  .block h2 { font-size: clamp(28px, 3.6vw, 42px); font-weight: 600; margin: 8px 0 14px; line-height: 1.3; }
+  .lead { color: var(--muted); max-width: 640px; }
+
+  .specs { margin-top: 44px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .spec { background: rgba(6,6,12,.82); padding: 26px 24px; }
+  .spec strong { font-family: "Orbitron", sans-serif; font-size: 30px; font-weight: 700; display: block; color: #fff; direction: ltr; text-align: right; }
+  .spec strong em { font-style: normal; font-size: 14px; color: var(--muted); margin-inline-start: 4px; }
+  .spec span { font-size: 14px; color: var(--muted); }
+
+  .steps { margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 18px; counter-reset: s; }
+  .step { position: relative; padding: 24px 20px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--glass); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+  .step::before { counter-increment: s; content: "0" counter(s); font-family: "Orbitron", sans-serif; font-size: 13px; color: var(--accent); }
+  .step h3 { font-size: 17px; font-weight: 600; margin: 6px 0 4px; }
+  .step p { font-size: 13.5px; color: var(--muted); }
+  .step .wk { position: absolute; top: 22px; left: 20px; font-size: 12px; color: var(--dim); }
+
+  /* نموذج الطلب */
+  .order { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: start; }
+  .order-art { position: sticky; top: 110px; border-radius: 24px; overflow: hidden; border: 1px solid var(--line); aspect-ratio: 1179/1334; }
+  .order-art img { width: 100%; height: 100%; object-fit: cover; display: block; transition: filter .6s; }
+  .order-art .serial { position: absolute; bottom: 16px; right: 16px; left: 16px; display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  form { display: grid; gap: 18px; margin-top: 28px; }
+  label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  input, select {
+    width: 100%; padding: 13px 16px; border-radius: 12px; border: 1px solid var(--line);
+    background: rgba(10,10,18,.7); color: var(--ink); font: inherit; font-size: 15px; outline: none;
+    transition: border-color .25s, box-shadow .25s;
+  }
+  input:focus, select:focus { border-color: rgba(255,79,216,.55); box-shadow: 0 0 0 3px rgba(255,79,216,.12); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .finishes { display: flex; gap: 12px; flex-wrap: wrap; }
+  .finish { flex: 1 1 120px; position: relative; }
+  .finish input { position: absolute; opacity: 0; pointer-events: none; }
+  .finish span {
+    display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+    background: rgba(10,10,18,.7); cursor: pointer; color: var(--ink); font-size: 14px; transition: border-color .25s;
+  }
+  .finish span::before { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--sw); box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); flex: none; }
+  .finish input:checked + span { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,79,216,.12); }
+  .finish input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .total { display: flex; justify-content: space-between; align-items: center; padding-top: 6px; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
+  .total strong { font-family: "Orbitron", sans-serif; color: var(--ink); font-size: 20px; }
+  .note { font-size: 12px; color: var(--dim); }
+  .done { display: none; padding: 26px; border-radius: var(--radius); border: 1px solid rgba(255,79,216,.4); background: rgba(30,12,36,.6); margin-top: 28px; }
+  .done h3 { font-size: 20px; margin-bottom: 6px; }
+  .done p { color: var(--muted); }
+  .done .latin { color: var(--accent); }
+
+  footer { padding: 40px clamp(16px, 4vw, 48px); border-top: 1px solid var(--line); color: var(--dim); font-size: 13px; text-align: center; }
+  footer a { color: var(--muted); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+
+  /* ---------- الشاشات الصغيرة ---------- */
+  @media (max-width: 980px) {
+    nav { display: none; }
+    .stage-wrap { grid-template-columns: minmax(0, 1fr); }
+    .stage { width: min(100%, 440px); order: -1; }
+    #links { display: none; }
+    .features { flex-direction: row; overflow-x: auto; scroll-snap-type: x mandatory; padding: 4px 2px 10px; gap: 10px; }
+    .features::-webkit-scrollbar { display: none; }
+    .feature { flex: 0 0 78%; scroll-snap-align: center; transform: none !important; }
+    .feature p { display: block; }
+    .order { grid-template-columns: 1fr; }
+    .order-art { position: relative; top: 0; max-width: 420px; }
+  }
+  @media (max-width: 560px) {
+    .brand small { display: none; }
+    .row { grid-template-columns: 1fr; }
+    .hero-foot { justify-content: center; text-align: center; }
+    .hero-foot .btn { width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="nebula" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<header>
+  <a class="brand" href="#top">
+    <span class="brand-mark">TF</span>
+    <span>TF Audio<small>Bone Series · سلسلة العظام</small></span>
+  </a>
+  <nav>
+    <a href="#features">المزايا</a>
+    <a href="#specs">المواصفات</a>
+    <a href="#craft">الصناعة</a>
+  </nav>
+  <a class="btn btn-primary btn-sm" href="#order">اطلب قطعتك</a>
+</header>
+
+<main id="top">
+  <!-- ===== البطل ===== -->
+  <section class="hero" id="features">
+    <div class="hero-head">
+      <span class="badge"><i></i> إصدار محدود · <span class="latin">99</span> قطعة فقط · تُصنع تحت الطلب</span>
+      <h1>CRANIUM</h1>
+      <p class="tagline">سماعة منحوتة من الكروم الداكن، صوتها قادم من عمق الكون. كل قطعة تحمل رقماً لا يتكرر.</p>
+    </div>
+
+    <div class="stage-wrap" id="stageWrap">
+      <svg id="links" aria-hidden="true">
+        <defs>
+          <linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#ff4fd8"/><stop offset="1" stop-color="#b26bff"/>
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div class="features" id="featRight"></div>
+
+      <div class="stage" id="stage">
+        <div class="orbit"></div>
+        <div class="orbit o2"></div>
+        <div class="floor" id="floor"></div>
+        <div class="model" id="model">
+          <picture>
+            <source srcset="skull-headphones.webp" type="image/webp">
+            <img src="skull-headphones.jpg" alt="سماعة TF Cranium بتصميم جمجمة من الكروم وعظمة رأس معدنية" width="1179" height="1334" draggable="false">
+          </picture>
+          <div class="shine"></div>
+          <div class="eye" style="left:60%;top:71%"></div>
+          <div class="eye r" style="left:74.9%;top:70.4%"></div>
+        </div>
+      </div>
+
+      <div class="features" id="featLeft"></div>
+    </div>
+
+    <div>
+      <div class="hero-foot">
+        <div class="stock">
+          <div class="stock-top"><span>القطع المتبقية</span><b><span class="latin" id="left">37</span> / <span class="latin">99</span></b></div>
+          <div class="bar"><span id="bar"></span></div>
+        </div>
+        <div class="price"><small>السعر</small><strong class="latin">$1,490</strong></div>
+        <a class="btn btn-primary" href="#order">احجز رقمك الآن</a>
+      </div>
+      <p class="hint">مرّر المؤشر فوق السماعة لتحريكها · اضغط على النقاط لاستكشاف الأجزاء</p>
+    </div>
+  </section>
+
+  <!-- ===== المواصفات ===== -->
+  <section class="block" id="specs">
+    <div class="container reveal">
+      <p class="eyebrow">SPECIFICATIONS</p>
+      <h2>هندسة صوتية بقلب معدني</h2>
+      <p class="lead">خلف الجمجمة المصقولة تعمل منظومة صوتية مصممة للدقة: قاع عميق متماسك، ووسط دافئ، وحدّة صافية بلا إجهاد للأذن.</p>
+      <div class="specs">
+        <div class="spec"><strong>50<em>mm</em></strong><span>مشغّل بغشاء بيريليوم</span></div>
+        <div class="spec"><strong>5–40k<em>Hz</em></strong><span>نطاق الاستجابة الترددية</span></div>
+        <div class="spec"><strong>32<em>Ω</em></strong><span>مقاومة تناسب الهاتف والمضخم</span></div>
+        <div class="spec"><strong>-38<em>dB</em></strong><span>عزل نشط للضوضاء</span></div>
+        <div class="spec"><strong>60<em>h</em></strong><span>تشغيل لاسلكي بشحنة واحدة</span></div>
+        <div class="spec"><strong>412<em>g</em></strong><span>الوزن بالتيتانيوم المصبوب</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== الصناعة ===== -->
+  <section class="block" id="craft">
+    <div class="container reveal">
+      <p class="eyebrow">MADE TO ORDER</p>
+      <h2>لا نصنعها حتى تطلبها</h2>
+      <p class="lead">لا توجد قطع في المخزن. عند تأكيد طلبك يُخصَّص لك رقم تسلسلي، وتبدأ رحلة تصنيع سماعتك يدوياً خطوة بخطوة، مع صور توثّق كل مرحلة.</p>
+      <div class="steps">
+        <div class="step"><span class="wk">الأسبوع 1</span><h3>حجز الرقم</h3><p>تختار اللمسة النهائية والنقش، ونثبّت رقمك من 99.</p></div>
+        <div class="step"><span class="wk">الأسبوع 2</span><h3>الصب</h3><p>تُصب الجمجمة والعظمة من التيتانيوم في قوالب فردية.</p></div>
+        <div class="step"><span class="wk">الأسبوع 3–4</span><h3>النحت والتلميع</h3><p>نحت الشقوق والتفاصيل وصقل الكروم يدوياً حتى يصبح كالمرآة.</p></div>
+        <div class="step"><span class="wk">الأسبوع 5</span><h3>المعايرة</h3><p>ضبط كل مشغّل على حدة وقياس منحنى صوته وإرفاقه معك.</p></div>
+        <div class="step"><span class="wk">الأسبوع 6</span><h3>التسليم</h3><p>تصلك في صندوق معدني مبطّن مع شهادة أصالة موقّعة.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== الطلب ===== -->
+  <section class="block" id="order">
+    <div class="container order reveal">
+      <div class="order-art">
+        <picture>
+          <source srcset="skull-headphones.webp" type="image/webp">
+          <img src="skull-headphones.jpg" alt="" id="artImg" loading="lazy">
+        </picture>
+        <div class="serial"><span>شهادة أصالة</span><span class="latin" id="serialTag">Nº 063 / 099</span></div>
+      </div>
+      <div>
+        <p class="eyebrow">PRE-ORDER</p>
+        <h2>احجز قطعتك المرقّمة</h2>
+        <p class="lead">عربون الحجز 20% ويُستكمل المبلغ قبل الشحن. يمكنك الإلغاء واسترداد العربون خلال أول 7 أيام.</p>
+
+        <form id="orderForm" novalidate>
+          <div class="row">
+            <label>الاسم الكامل<input name="name" required autocomplete="name"></label>
+            <label>البريد الإلكتروني<input name="email" type="email" required autocomplete="email"></label>
+          </div>
+          <div>
+            <label style="margin-bottom:8px">اللمسة النهائية</label>
+            <div class="finishes">
+              <label class="finish"><input type="radio" name="finish" value="dark" data-f="none" checked><span style="--sw:linear-gradient(135deg,#6a6b78,#16161c)">كروم داكن</span></label>
+              <label class="finish"><input type="radio" name="finish" value="silver" data-f="brightness(1.25) contrast(1.05)"><span style="--sw:linear-gradient(135deg,#f2f2f6,#8a8b96)">فضة مرآة</span></label>
+              <label class="finish"><input type="radio" name="finish" value="gold" data-f="sepia(.7) saturate(1.6) brightness(1.1)" data-extra="250"><span style="--sw:linear-gradient(135deg,#f3d58a,#7a5a1c)">ذهب عتيق +$250</span></label>
+            </div>
+          </div>
+          <div class="row">
+            <label>نقش الأحرف على العظمة (اختياري)<input name="engrave" maxlength="4" placeholder="مثلاً: TF" style="direction:ltr;text-align:right"></label>
+            <label>الدولة<select name="country">
+              <option>السعودية</option><option>الإمارات</option><option>الكويت</option><option>قطر</option><option>البحرين</option><option>عُمان</option><option>دولة أخرى</option>
+            </select></label>
+          </div>
+          <div class="total"><span>العربون المطلوب الآن</span><strong class="latin" id="deposit">$298</strong></div>
+          <button class="btn btn-primary" type="submit">تأكيد الحجز</button>
+          <p class="note">نموذج للعرض فقط، ولا يتم إرسال أي بيانات.</p>
+        </form>
+
+        <div class="done" id="done" role="status">
+          <h3>تم حجز رقمك</h3>
+          <p>رقمك التسلسلي <span class="latin" id="doneSerial">Nº 063</span>. سنرسل لك تأكيد الحجز وصور كل مرحلة من مراحل التصنيع.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  TF Audio · Bone Series — إصدار محدود من <span class="latin">99</span> قطعة · <a href="../index.html">العودة إلى معرض أعمالي</a>
+</footer>
+
+<script>
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ================= سماء النجوم الحية ================= */
+  const sky = document.getElementById("sky");
+  const ctx = sky.getContext("2d");
+  let W, H, DPR, stars = [], shooters = [], mx = 0, my = 0, smx = 0, smy = 0;
+
+  function resize() {
+    DPR = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    sky.width = W * DPR; sky.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const n = Math.round((W * H) / 2600);
+    stars = Array.from({ length: n }, () => {
+      const layer = Math.random() < .7 ? 0 : Math.random() < .75 ? 1 : 2;
+      const tint = Math.random();
+      return {
+        x: Math.random() * W, y: Math.random() * H, layer,
+        r: [0.5, 0.9, 1.5][layer] * (0.6 + Math.random() * 0.7),
+        a: 0.35 + Math.random() * 0.65,
+        tw: 0.4 + Math.random() * 2.2, ph: Math.random() * Math.PI * 2,
+        c: tint < .12 ? "255,190,240" : tint < .25 ? "190,205,255" : "255,255,255",
+      };
+    });
+  }
+  resize();
+  addEventListener("resize", resize);
+  addEventListener("pointermove", e => { mx = e.clientX / W - .5; my = e.clientY / H - .5; });
+
+  function spawnShooter() {
+    const fromLeft = Math.random() < .5;
+    shooters.push({
+      x: fromLeft ? Math.random() * W * .5 : W * .5 + Math.random() * W * .5,
+      y: Math.random() * H * .45,
+      vx: (fromLeft ? 1 : -1) * (6 + Math.random() * 5), vy: 2.5 + Math.random() * 2.5,
+      life: 0, max: 60 + Math.random() * 40,
+    });
+  }
+
+  let last = performance.now();
+  function drawSky(now) {
+    const dt = Math.min((now - last) / 16.67, 3); last = now;
+    const t = now / 1000;
+    smx += (mx - smx) * .04; smy += (my - smy) * .04;
+    ctx.clearRect(0, 0, W, H);
+    const speeds = [0.015, 0.04, 0.08], par = [6, 16, 34];
+    for (const s of stars) {
+      if (!reduce) { s.x -= speeds[s.layer] * dt; if (s.x < -2) s.x = W + 2; }
+      const x = s.x - smx * par[s.layer], y = s.y - smy * par[s.layer];
+      const tw = reduce ? 1 : 0.55 + 0.45 * Math.sin(t * s.tw + s.ph);
+      const a = s.a * tw;
+      ctx.fillStyle = `rgba(${s.c},${a})`;
+      ctx.beginPath(); ctx.arc(x, y, s.r, 0, 6.283); ctx.fill();
+      if (s.layer === 2 && a > .6) { // وهج وأشعة للنجوم الكبيرة
+        ctx.fillStyle = `rgba(${s.c},${a * .12})`;
+        ctx.beginPath(); ctx.arc(x, y, s.r * 4, 0, 6.283); ctx.fill();
+        ctx.strokeStyle = `rgba(${s.c},${a * .35})`; ctx.lineWidth = .6;
+        ctx.beginPath(); ctx.moveTo(x - s.r * 5, y); ctx.lineTo(x + s.r * 5, y);
+        ctx.moveTo(x, y - s.r * 5); ctx.lineTo(x, y + s.r * 5); ctx.stroke();
+      }
+    }
+    if (!reduce && Math.random() < 0.004 * dt) spawnShooter();
+    shooters = shooters.filter(sh => {
+      sh.life += dt; sh.x += sh.vx * dt; sh.y += sh.vy * dt;
+      const k = 1 - sh.life / sh.max;
+      const g = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx * 14, sh.y - sh.vy * 14);
+      g.addColorStop(0, `rgba(255,255,255,${k})`); g.addColorStop(1, "rgba(255,255,255,0)");
+      ctx.strokeStyle = g; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(sh.x, sh.y); ctx.lineTo(sh.x - sh.vx * 14, sh.y - sh.vy * 14); ctx.stroke();
+      return sh.life < sh.max;
+    });
+  }
+
+  /* ================= المزايا ونقاط التعريف ================= */
+  const FEATURES = [
+    { x: 38, y: 11,   side: "left", title: "عظمة الرأس", text: "قوس على شكل عظمة مصبوب من التيتانيوم، مرن بما يكفي ليحتضن الرأس بثبات دون ضغط، ومعالج بطبقة مطفأة مقاومة للخدش." },
+    { x: 26, y: 64,  side: "left", title: "وسائد الذاكرة", text: "إسفنج ذاكرة يتشكّل حسب أذنك، مغلّف بجلد بروتيني ناعم بملمس محبّب، قابل للفك والاستبدال بمغناطيس." },
+    { x: 65, y: 85,  side: "left", title: "فكّ التهوية", text: "الأسنان ليست للزينة فقط: فتحات دقيقة بين الأسنان تعمل منفذاً للهواء يعمّق القاع ويمنع الضغط داخل الكوب." },
+    { x: 66.4, y: 33.6, side: "right", title: "شعار TF المحفور", text: "شعار محفور بالليزر على قاعدة العظمة، وتحته الرقم التسلسلي لقطعتك من 99 ونقش أحرفك إن طلبت." },
+    { x: 63, y: 41, side: "right", title: "مفاصل فولاذية", text: "مفاصل من الفولاذ المقاوم للصدأ بمسامير مكشوفة، تدور الأكواب 90° لتستقر على الكتف أو تُطوى في الصندوق." },
+    { x: 58, y: 57, side: "right", title: "جمجمة الكروم", text: "كوب خارجي على شكل جمجمة مصقولة يدوياً كالمرآة بشقوق منحوتة، يخفي خلفه مشغّل بيريليوم بقطر 50 ملم." },
+    { x: 74.9, y: 70.4, side: "right", title: "عيون نابضة", text: "عينان بإضاءة LED تنبضان مع إيقاع الموسيقى، ويمكن تغيير لونها أو إطفاؤها من التطبيق." },
+  ];
+
+  const model = document.getElementById("model");
+  const wrap = document.getElementById("stageWrap");
+  const svg = document.getElementById("links");
+  const cols = { right: document.getElementById("featRight"), left: document.getElementById("featLeft") };
+  const NS = "http://www.w3.org/2000/svg";
+  const items = FEATURES.map((f, i) => {
+    const dot = document.createElement("button");
+    dot.className = "dot"; dot.style.left = f.x + "%"; dot.style.top = f.y + "%";
+    dot.setAttribute("aria-label", f.title);
+    model.appendChild(dot);
+
+    const card = document.createElement("button");
+    card.className = "feature"; card.type = "button";
+    card.innerHTML = `<span class="num">${String(i + 1).padStart(2, "0")}</span><h3>${f.title}</h3><p>${f.text}</p>`;
+    cols[f.side].appendChild(card);
+
+    const path = document.createElementNS(NS, "path");
+    const end = document.createElementNS(NS, "circle"); end.setAttribute("r", 2.5);
+    svg.append(path, end);
+
+    const pick = () => { setActive(i, true); };
+    dot.addEventListener("click", pick);
+    card.addEventListener("click", pick);
+    card.addEventListener("mouseenter", () => { if (matchMedia("(hover:hover)").matches) setActive(i, true); });
+    return { f, dot, card, path, end };
+  });
+
+  let active = -1, pausedUntil = 0;
+  function setActive(i, user) {
+    if (i === active) return;
+    active = i;
+    items.forEach((it, k) => {
+      const on = k === i;
+      it.dot.classList.toggle("active", on);
+      it.card.classList.toggle("active", on);
+      it.path.classList.toggle("active", on);
+      it.end.classList.toggle("active", on);
+    });
+    if (user) pausedUntil = performance.now() + 12000;
+    if (innerWidth <= 980) {
+      const c = items[i].card, col = c.parentElement;
+      col.scrollTo({ left: c.offsetLeft - (col.clientWidth - c.clientWidth) / 2, behavior: "smooth" });
+    }
+  }
+  setActive(5);
+  setInterval(() => { if (performance.now() > pausedUntil) setActive((active + 1) % items.length); }, 4500);
+
+  function drawLinks() {
+    if (innerWidth <= 980) return;
+    const wr = wrap.getBoundingClientRect();
+    svg.setAttribute("viewBox", `0 0 ${wr.width} ${wr.height}`);
+    for (const it of items) {
+      const d = it.dot.getBoundingClientRect(), c = it.card.getBoundingClientRect();
+      const x1 = d.left + d.width / 2 - wr.left, y1 = d.top + d.height / 2 - wr.top;
+      const right = it.f.side === "right"; // العمود الأيمن في الصفحة
+      const x2 = (right ? c.left : c.right) - wr.left, y2 = c.top + c.height / 2 - wr.top;
+      const mxp = x2 + (right ? -28 : 28);
+      it.path.setAttribute("d", `M${x1},${y1} C${(x1 + mxp) / 2},${y1} ${mxp},${y2} ${x2},${y2}`);
+      it.end.setAttribute("cx", x2); it.end.setAttribute("cy", y2);
+    }
+    const g = svg.querySelector("#lg"); g.setAttribute("x2", wr.width);
+  }
+
+  /* ================= دوران السماعة ================= */
+  const stage = document.getElementById("stage");
+  const floor = document.getElementById("floor");
+  let tx = 0, ty = 0, ctxX = 0, ctxY = 0, hover = false;
+  stage.addEventListener("pointermove", e => {
+    const r = stage.getBoundingClientRect();
+    tx = (e.clientX - r.left) / r.width - .5; ty = (e.clientY - r.top) / r.height - .5; hover = true;
+  });
+  stage.addEventListener("pointerleave", () => { tx = ty = 0; hover = false; });
+
+  const t0 = performance.now();
+  function frame(now) {
+    drawSky(now);
+    const t = (now - t0) / 1000;
+    ctxX += (tx - ctxX) * .06; ctxY += (ty - ctxY) * .06;
+    const sway = reduce ? -10 : Math.sin(t * 2 * Math.PI / 16) * 24;   // دوران هادئ ذهاباً وإياباً
+    const ry = sway * (hover ? .35 : 1) + ctxX * 34;
+    const rx = (reduce ? 0 : Math.sin(t * 2 * Math.PI / 11) * 3) - ctxY * 18;
+    const fy = reduce ? 0 : Math.sin(t * 2 * Math.PI / 6) * 10;          // طفو
+    model.style.transform = `translateY(${fy}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    floor.style.opacity = (0.75 - fy / 40).toFixed(2);
+    floor.style.transform = `scaleX(${(1 - fy / 120).toFixed(3)})`;
+    drawLinks();
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  const hdr = document.querySelector("header");
+  const onScroll = () => hdr.classList.toggle("scrolled", scrollY > 40);
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  /* ================= المخزون والظهور ================= */
+  const TOTAL = 99, LEFT = 37;
+  requestAnimationFrame(() => setTimeout(() => {
+    document.getElementById("bar").style.width = ((TOTAL - LEFT) / TOTAL * 100) + "%";
+  }, 300));
+
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .15 });
+  document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+  /* ================= نموذج الحجز (عرض فقط) ================= */
+  const form = document.getElementById("orderForm");
+  const artImg = document.getElementById("artImg");
+  const deposit = document.getElementById("deposit");
+  const serial = String(TOTAL - LEFT + 1).padStart(3, "0");
+  document.getElementById("serialTag").textContent = `Nº ${serial} / 099`;
+  document.getElementById("doneSerial").textContent = `Nº ${serial}`;
+  function updateOrder() {
+    const f = form.querySelector("input[name=finish]:checked");
+    artImg.style.filter = f.dataset.f;
+    const price = 1490 + Number(f.dataset.extra || 0);
+    deposit.textContent = "$" + Math.round(price * .2).toLocaleString("en-US");
+  }
+  form.addEventListener("change", updateOrder);
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    if (!form.reportValidity()) return;
+    form.style.display = "none";
+    document.getElementById("done").style.display = "block";
+  });
+  updateOrder();
+})();
+</script>
+</body>
+</html>
